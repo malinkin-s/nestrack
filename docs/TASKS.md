@@ -673,8 +673,8 @@ Nestrack depends on these; they are done in [finnpower-counter](https://github.c
 
 | ID | Size | Task | Needed by |
 |---|---|---|---|
-| X-01 | S | Make finnpower-counter installable: `pyproject.toml`, package `finnpower_counter` without the GUI as a required import, tagged releases | S0-02 |
-| X-02 | S | Keep `core/` and `presentation` free of GUI and network imports, checked in CI | S0-02 |
+| X-01 | S | Make finnpower-counter installable: `pyproject.toml`, package `finnpower_counter` without the GUI as a required import, tagged releases — task P-01 there | S0-02 |
+| X-02 | S | Keep `core/` and `presentation` free of GUI and network imports, checked in CI — task P-02 there | S0-02 |
 
 ---
 
