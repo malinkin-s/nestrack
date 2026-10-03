@@ -55,6 +55,9 @@ jobs:
       - name: Run the built probe against a local server
         shell: bash
         working-directory: tools/probe
+        env:
+          # Git Bash would otherwise turn "/CN=..." into a Windows path.
+          MSYS_NO_PATHCONV: '1'
         run: |
           openssl req -x509 -newkey rsa:2048 -nodes -days 1 \
             -keyout probe-key.pem -out probe-cert.pem -subj "/CN=nestrack-probe"

@@ -11,6 +11,9 @@ Without `cryptography`, OpenSSL does the same:
     openssl req -x509 -newkey rsa:2048 -nodes -days 30 \\
         -keyout probe-key.pem -out probe-cert.pem \\
         -subj "/CN=nestrack-probe" -addext "subjectAltName=IP:192.168.56.10"
+
+In Git Bash on Windows, prefix it with MSYS_NO_PATHCONV=1 — otherwise
+"/CN=..." is rewritten into a Windows path.
 """
 
 import argparse
