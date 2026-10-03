@@ -43,6 +43,10 @@ X-01 (in finnpower-counter) ──► S0-02
 
 ### S0-01 Windows 7 compatibility probe · L · gate
 
+**Status.** In progress: the probe is in [`tools/probe/`](../tools/probe/)
+— server, client, PyInstaller build, tests in CI on Windows / Python 3.8 x86.
+Waiting for a run on a real Windows 7 32-bit PC.
+
 **Goal.** Prove on a real shop-floor PC that the client can do everything the
 architecture expects of it.
 

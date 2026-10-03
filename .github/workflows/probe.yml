@@ -1,0 +1,73 @@
+name: Probe
+
+on:
+  push:
+    branches: [main]
+    paths: ['tools/probe/**', '.github/workflows/probe.yml']
+  pull_request:
+    paths: ['tools/probe/**', '.github/workflows/probe.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # The client's target: Python 3.8, 32-bit, on Windows (DPAPI runs here).
+          - os: windows-latest
+            python: '3.8'
+            arch: x86
+          - os: ubuntu-22.04
+            python: '3.8'
+            arch: x64
+          - os: ubuntu-latest
+            python: '3.13'
+            arch: x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          architecture: ${{ matrix.arch }}
+      - run: python -m pip install pytest
+      - run: python -m pytest -q tools/probe
+
+  build:
+    # The .exe to take to the Windows 7 PC. Running it here proves only that
+    # it works on the CI's Windows; the real check is on the target (S0-01).
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+          architecture: x86
+      - name: Build
+        working-directory: tools/probe
+        run: |
+          python -m pip install "pyinstaller==5.13.2"
+          pyinstaller --noconfirm probe.spec
+      - name: Run the built probe against a local server
+        shell: bash
+        working-directory: tools/probe
+        run: |
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 \
+            -keyout probe-key.pem -out probe-cert.pem -subj "/CN=nestrack-probe"
+          python probe_server.py --host 127.0.0.1 --port 18443 --interval 0.2 > server.log 2>&1 &
+          sleep 3
+          FP=$(python -c "import probe_server; print(probe_server.fingerprint_of_pem('probe-cert.pem'))")
+          printf "[probe]\nurl = https://127.0.0.1:18443\nfingerprint = %s\nsse_seconds = 5\n" "$FP" > dist/probe.ini
+          ./dist/nestrack-probe.exe
+          cat dist/probe-report.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nestrack-probe-win32
+          path: |
+            tools/probe/dist/nestrack-probe.exe
+            tools/probe/dist/probe-report.txt
+            tools/probe/probe.ini.example
