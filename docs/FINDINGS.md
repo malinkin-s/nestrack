@@ -27,3 +27,13 @@ The code audit of finnpower-counter, which Nestrack grew out of, is in
 | PLN-13 | 1C:Enterprise can publish a standard OData v3 interface per infobase; 1C teams also commonly pull from external HTTP APIs with their own scheduled jobs | The integration hub supports both: an OData connector and a generic event feed (S8-04, S8-08) |
 | PLN-14 | NC files carry no order or job number (`CUSTOMER` and `Order ID` are empty in the files analysed) | ERP integration needs mapping tables maintained by the administrator (S8-03) |
 | PLN-15 | The system needs the same `.nc`/`.fms` parsing that finnpower-counter has verified against 30 real programs and 8,764 setup reports | Nestrack depends on finnpower-counter's parser as a pinned package instead of copying it (X-01) |
+
+---
+
+## Windows 7 probe (S0-01) — 2026-10-03
+
+| ID | Finding | Consequence |
+|---|---|---|
+| PRB-01 | The probe `.exe` (Python 3.8.10 32-bit, PyInstaller 5.13.2) passes all five checks on the CI's Windows (10.0 build 26100): TLS 1.3 with a pinned certificate, a wrong certificate refused, SSE through three forced reconnects with no gaps, DPAPI in user and machine scope | The approach works in a frozen build. **Not yet confirmed on Windows 7** — S0-01 stays open until a report from a real Windows 7 32-bit PC is recorded here |
+| PRB-02 | The OpenSSL bundled with Python 3.8.10 is 1.1.1k from March 2021 — long out of support, as PLN-04 expected | The client talks only to its own server with a pinned certificate; nothing else on the network is trusted. The server's TLS settings must keep TLS 1.2 available for such clients |
+

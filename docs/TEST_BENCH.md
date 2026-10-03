@@ -70,7 +70,7 @@ Not every task needs every node.
 
 | Bench | Nodes | For tasks |
 |---|---|---|
-| **A — Probe** | DEV, a throw-away probe server, WS-W7 | S0-01 |
+| **A — Probe** | DEV, the probe server from [`tools/probe/`](../tools/probe/), WS-W7 | S0-01 |
 | **B — Minimal** | DEV, SRV-LIN (server only), WS-W7, BROWSER | Stages 1–4 |
 | **C — Network** | B + FILES + NET + WS-W10 | Stage 3 offline and concurrency tests; stage 5 |
 | **D — Directory** | B + AD | Stage 7 |

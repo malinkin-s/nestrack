@@ -1,0 +1,11 @@
+; Copy to probe.ini next to nestrack-probe.exe and fill in.
+
+[probe]
+; Address of the probe server, as the shop-floor PC sees it.
+url = https://192.168.56.10:8443
+
+; SHA-256 fingerprint printed by probe_server.py at start-up.
+fingerprint = AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99
+
+; How long to read the event stream, in seconds.
+sse_seconds = 30
